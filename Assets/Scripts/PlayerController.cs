@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float speed;
@@ -12,6 +12,8 @@ public class PlayerMove : MonoBehaviour
     private Transform camTrans;
     [SerializeField]
     private float jumpForce;
+    [SerializeField]
+    private Transform model;
 
     private Rigidbody rb;
     private PhotonView pw;
@@ -21,6 +23,7 @@ public class PlayerMove : MonoBehaviour
 
     private float rotY = 0.0f; // rotation around the up/y axis
     private float rotX = 0.0f; // rotation around the right/x axis
+    private bool onGround;
 
     private void Start()
     {
@@ -63,10 +66,35 @@ public class PlayerMove : MonoBehaviour
                 go.GetComponent<Rigidbody>().AddForce(camTrans.forward * shootForce);
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (onGround && Input.GetKeyDown(KeyCode.Space))
             {
                 rb.AddForce(transform.up * jumpForce);
             }
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                model.localScale = new Vector3(1, .5f, 1);
+                model.localPosition = new Vector3(0, .5f, 0);
+                camTrans.localPosition = new Vector3(0, .75f, 0);
+            }
+            else
+            {
+                model.localScale = new Vector3(1, 1, 1);
+                model.localPosition = new Vector3(0, 1, 0);
+                camTrans.localPosition = new Vector3(0, 1.5f, 0);
+            }
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+            onGround = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+            onGround = false;
     }
 }
