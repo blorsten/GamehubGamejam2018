@@ -1,0 +1,100 @@
+# =============== #
+# Unity generated #
+# =============== #
+[Tt]emp/
+[Oo]bj/
+[Bb]uilds/
+[Bb]uild/
+/[Ll]ibrary/
+sysinfo.txt
+*.stackdump
+*.apk
+*.main.obb
+
+# ========== #
+# Zios Theme #
+# ========== #
+@Themes/
+@themes.meta
+@Themes
+
+# Release Files
+output_log.txt
+
+Assets/AssetStoreTools*
+EditorSettings.asset
+Zios/
+ 
+quantum_unity/Assets/Resources/PlayerData/PlayerData.dat
+quantum_unity/Assets/Resources/PlayerData/PlayerData.dat.meta
+quantum_unity/Assets/Resources/PlayerData/PlayerPref.ini
+quantum_unity/Assets/Resources/PlayerData/PlayerPref.ini.meta
+
+# ============================================= #
+# Visual Studio / MonoDevelop / Rider generated #
+# ============================================= #
+[Ee]xported[Oo]bj/
+.vs/
+/*.userprefs
+/*.csproj
+/*.pidb
+/*.suo
+/*.sln*
+/*.user
+/*.unityproj
+/*.booproj
+/.idea*/
+.vscode/
+ 
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+[Tt]humbs.db
+[Dd]esktop.ini
+
+
+#################
+## Quantum
+#################
+
+quantum_unity/Library
+quantum_unity/Temp
+quantum_unity/*.csproj
+quantum_unity/*.sln
+
+.vs
+
+*.mdb
+*.mdb.meta
+*.pdb
+*.pdb.meta
+*.apk
+
+quantum_code/quantum\.state/CodeGen/
+
+quantum_code/quantum\.state/bin/
+
+quantum_unity/Assets/Plugins/quantum\.state\.dll
+
+quantum_unity/Assets/Plugins/quantum\.systems\.dll
+
+quantum_unity/Assets/Quantum/Resources/EntityPrefabsList\.asset
+
+quantum_unity/Assets/Quantum/Editor/PropertyDrawers/Generated/AssetLinkDrawers\.cs
+
+quantum_unity/Assets/Plugins/quantum\.state\.dll\.meta
+
+quantum_unity/Assets/Plugins/quantum\.systems\.dll\.meta
+
+quantum_unity/Assets/Quantum/Editor/PropertyDrawers/Generated/AssetLinkDrawers\.cs\.meta
+
+quantum_unity/Assets/Quantum/Resources/EntityPrefabsList\.asset\.meta
+
+sdk/tools/ContentBuilder/output/
+
+sdk/tools/ContentBuilder/content/windows_content/
