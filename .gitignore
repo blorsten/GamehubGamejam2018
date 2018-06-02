@@ -3,8 +3,6 @@
 # =============== #
 [Tt]emp/
 [Oo]bj/
-[Bb]uilds/
-[Bb]uild/
 /[Ll]ibrary/
 sysinfo.txt
 *.stackdump
@@ -24,7 +22,7 @@ output_log.txt
 Assets/AssetStoreTools*
 EditorSettings.asset
 Zios/
- 
+
 quantum_unity/Assets/Resources/PlayerData/PlayerData.dat
 quantum_unity/Assets/Resources/PlayerData/PlayerData.dat.meta
 quantum_unity/Assets/Resources/PlayerData/PlayerPref.ini
@@ -45,7 +43,7 @@ quantum_unity/Assets/Resources/PlayerData/PlayerPref.ini.meta
 /*.booproj
 /.idea*/
 .vscode/
- 
+
 # ============ #
 # OS generated #
 # ============ #

@@ -20,7 +20,7 @@ public class OnJoinedInstantiate : MonoBehaviour
                 {
                     spawnPos = this.SpawnPosition.position;
                 }
-
+                
                 Vector3 random = Random.insideUnitSphere;
                 random.y = 0;
                 random = random.normalized;
