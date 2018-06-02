@@ -26,6 +26,15 @@ public class PUNManager : PUNSingleton<PUNManager>
         SearchingForMatch = true;
     }
 
+    public void CancelSearch()
+    {
+        if (PhotonNetwork.inRoom)
+        {
+            PhotonNetwork.Disconnect();
+            SearchingForMatch = false;
+        }
+    }
+
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
@@ -60,8 +69,8 @@ public class PUNManager : PUNSingleton<PUNManager>
             Hashtable ht = new Hashtable();
             ht.Add("START", true);
             PhotonNetwork.room.SetCustomProperties(ht);
-            PhotonNetwork.room.IsVisible = false;
-            PhotonNetwork.room.IsOpen = false;
+            //PhotonNetwork.room.IsVisible = false;
+            //PhotonNetwork.room.IsOpen = false;
         }
     }
 }

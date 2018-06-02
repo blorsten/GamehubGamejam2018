@@ -6,14 +6,25 @@ using UnityEngine.UI;
 public class MenuProxy : MonoBehaviour
 {
     public InputField inputField;
-    public Button StartButton;
-    public Button SearchButton;
+    public GameObject UiOffline;
+    public GameObject UiConnecting;
+    public Text statusMessage;
+    public Button startNowButton;
 
     private void Update()
     {
-        SearchButton.gameObject.SetActive(!PhotonNetwork.connected && !PUNManager.Instance.SearchingForMatch);
-        inputField.gameObject.SetActive(!PhotonNetwork.connected && !PUNManager.Instance.SearchingForMatch);
-        StartButton.gameObject.SetActive(PhotonNetwork.inRoom);
+        bool offline = !PhotonNetwork.connected && !PUNManager.Instance.SearchingForMatch;
+        UiOffline.SetActive(offline);
+
+        bool connecting = PhotonNetwork.inRoom;
+        UiConnecting.SetActive(connecting);
+        if (connecting)
+        {
+            startNowButton.gameObject.SetActive(PhotonNetwork.isMasterClient);
+
+            string text = "Looking for players... (" + PhotonNetwork.room.PlayerCount + "/" + PhotonNetwork.room.MaxPlayers + ")";
+            statusMessage.text = text;
+        }
     }
 
     public void SearchForMatch()
@@ -24,5 +35,10 @@ public class MenuProxy : MonoBehaviour
     public void StartMatchNow()
     {
         PUNManager.Instance.StartGame();
+    }
+
+    public void CancelSearch()
+    {
+        PUNManager.Instance.CancelSearch();
     }
 }

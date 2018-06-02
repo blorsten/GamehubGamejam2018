@@ -9,6 +9,7 @@ public class Gun : PunBehaviour, IPunObservable
 
     private RaycastHit[] _targetRaycasts = new RaycastHit[1];
     private RaycastHit? _targetRaycastHit;
+    private Vector3? _targetRayCastPoint;
     private Mineral _targetMineral;
 
     [SerializeField] private Transform _gunBarrel;
@@ -22,25 +23,25 @@ public class Gun : PunBehaviour, IPunObservable
 
     void Update()
     {
-        if (_targetRaycastHit != null)
+        if (_targetRayCastPoint != null)
         {
             _lineRenderer.positionCount = 2;
             _lineRenderer.SetPosition(0, _gunBarrel.transform.position);
-            _lineRenderer.SetPosition(1, _targetRaycastHit.Value.point);
+            _lineRenderer.SetPosition(1, _targetRayCastPoint.Value);
         }
         else
             _lineRenderer.positionCount = 0;
 
-        if (!_owner.Pw.isMine || !PhotonNetwork.connected)
+        if (!_owner.pw.isMine || !PhotonNetwork.connected)
             return;
 
         //Shoot
-        if (Input.GetMouseButtonDown(0) && !_isOutOfAmmo)
+        if (_owner.playerMode == PlayerMode.Normal && Input.GetMouseButtonDown(0) && !_isOutOfAmmo)
         {
-            var camTrans = _owner.camTrans;
-            var go = PhotonNetwork.Instantiate("Bullet", camTrans.position + camTrans.forward, Quaternion.identity, 0);
-            go.GetComponent<Rigidbody>().AddForce(camTrans.forward * _shootForce);
-            
+            var HeadTrans = _owner.HeadTrans;
+            var go = PhotonNetwork.Instantiate("Bullet", HeadTrans.position + HeadTrans.forward, Quaternion.identity, 0);
+            go.GetComponent<Rigidbody>().AddForce(HeadTrans.forward * _shootForce);
+
             _isOutOfAmmo = true;
         }
 
@@ -50,20 +51,21 @@ public class Gun : PunBehaviour, IPunObservable
             if (!_targetMineral)
             {
                 var hits = Physics.RaycastNonAlloc(
-                    _owner.camTrans.transform.position, 
-                    _owner.camTrans.forward, 
+                    _owner.HeadTrans.transform.position,
+                    _owner.HeadTrans.forward,
                     _targetRaycasts,
                     _reloadDistance, LayerMask.GetMask("Mineral"));
 
                 if (hits == 1)
                 {
                     _targetRaycastHit = _targetRaycasts[0];
+                    _targetRayCastPoint = _targetRaycastHit.Value.point;
                     _targetMineral = _targetRaycastHit.Value.transform.GetComponent<Mineral>();
                     _gatherPosition = _owner.transform.position;
                 }
             }
         }
-        
+
         if (Input.GetMouseButton(1) && _targetMineral)
         {
             //We're gathering!
@@ -92,7 +94,7 @@ public class Gun : PunBehaviour, IPunObservable
     private void FinishGathering(bool success)
     {
         if (success)
-            PhotonNetwork.Destroy(_targetMineral.gameObject);
+            _targetMineral.Disable();
 
         _isOutOfAmmo = !success;
         _targetMineral = null;
@@ -106,11 +108,13 @@ public class Gun : PunBehaviour, IPunObservable
     {
         if (stream.isWriting)
         {
-            stream.SendNext(_targetRaycastHit);
+            stream.SendNext(_targetRaycastHit.Value.point);
         }
-        else
+        else if (!stream.isWriting)
         {
-            _targetRaycastHit = (RaycastHit) stream.ReceiveNext();
+            var next = stream.ReceiveNext();
+            if (next != null)
+                _targetRayCastPoint = (Vector3)next;
         }
     }
 }
