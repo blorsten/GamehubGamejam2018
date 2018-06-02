@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-
         if (!PhotonNetwork.connected)
             Destroy(gameObject);
 
@@ -47,10 +46,9 @@ public class PlayerController : MonoBehaviour
             Vector3 rot = HeadTrans.localRotation.eulerAngles;
             rotY = rot.y;
             rotX = rot.x;
+            GameManager.Instance.localPlayer = this;
         }
 
-            GameManager.Instance.localPlayer = this;
-        if (pw.isMine)
         GameManager.Instance.RespawnPlayers();
     }
 
