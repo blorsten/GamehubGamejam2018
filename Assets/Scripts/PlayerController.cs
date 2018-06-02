@@ -9,9 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float speed;
     [SerializeField]
-    private float shootForce;
-    [SerializeField]
-    private Transform camTrans;
+    public Transform camTrans;
     [SerializeField]
     private float jumpForce;
     [SerializeField]
@@ -31,6 +29,9 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        if (!PhotonNetwork.connected)
+            Destroy(gameObject);
+
         rb = GetComponent<Rigidbody>();
         pw = GetComponent<PhotonView>();
 
@@ -85,16 +86,10 @@ public class PlayerController : MonoBehaviour
             Vector3 newPos = transform.position + transform.forward * y * speed * Time.deltaTime;
             newPos += transform.right * x * speed * Time.deltaTime;
 
-            if (playerMode == PlayerMode.Normal && Input.GetMouseButtonDown(0))
-            {
-                var go = PhotonNetwork.Instantiate("Bullet", camTrans.position + camTrans.forward, Quaternion.identity, 0);
-                go.GetComponent<Rigidbody>().AddForce(camTrans.forward * shootForce);
-            }
-
             if (onGround && Input.GetKeyDown(KeyCode.Space))
                 rb.AddForce(transform.up * jumpForce);
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftControl))
             {
                 model.localScale = new Vector3(1, .5f, 1);
                 model.localPosition = new Vector3(0, .5f, 0);

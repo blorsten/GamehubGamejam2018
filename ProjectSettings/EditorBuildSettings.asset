@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MPPlayground.unity
+    guid: 3308cffdf7fa911488515405f7ae7bb2
+  - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: dca8f50f2a2d008499260ec08f4aaccd
   - enabled: 1
