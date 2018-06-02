@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private float speed;
     public float crouchSpeed = 3;
     public Transform HeadTrans;
+    public GameObject lips;
+    public Gun gun;
     [SerializeField]
     private float jumpForce;
     [SerializeField]
@@ -47,6 +49,12 @@ public class PlayerController : MonoBehaviour
             rotY = rot.y;
             rotX = rot.x;
             GameManager.Instance.localPlayer = this;
+
+            foreach (Transform t in playerModel.transform)
+            {
+                Destroy(t.gameObject);
+            }
+
         }
     }
 
@@ -59,13 +67,20 @@ public class PlayerController : MonoBehaviour
         switch (playerMode)
         {
             case PlayerMode.Normal:
-                playerModel.GetComponent<MeshRenderer>().enabled = true;
+                foreach (Transform t in playerModel.transform)
+                {
+                    t.GetComponent<MeshRenderer>().enabled = true;
+                }
                 GunModel.GetComponent<MeshRenderer>().enabled = true;
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 playerModel.gameObject.layer = LayerMask.NameToLayer("Player");
                 break;
             case PlayerMode.Spectator:
-                playerModel.GetComponent<MeshRenderer>().enabled = false;
+
+                foreach (Transform t in playerModel.transform)
+                {
+                    t.GetComponent<MeshRenderer>().enabled = false;
+                }
                 GunModel.GetComponent<MeshRenderer>().enabled = false;
                 playerModel.gameObject.layer = LayerMask.NameToLayer("Spectator");
                 gameObject.layer = LayerMask.NameToLayer("Spectator");
@@ -93,15 +108,15 @@ public class PlayerController : MonoBehaviour
             {
                 _isCrouching = true;
                 playerModel.localScale = new Vector3(1, .5f, 1);
-                playerModel.localPosition = new Vector3(0, .5f, 0);
-                HeadTrans.localPosition = new Vector3(0, .75f, 0);
+                playerModel.localPosition = new Vector3(0, 0, 0);
+                HeadTrans.localPosition = new Vector3(0, 1.75f / 2, 0);
             }
             else
             {
                 _isCrouching = false;
                 playerModel.localScale = new Vector3(1, 1, 1);
-                playerModel.localPosition = new Vector3(0, 1, 0);
-                HeadTrans.localPosition = new Vector3(0, 1.5f, 0);
+                playerModel.localPosition = new Vector3(0, 0, 0);
+                HeadTrans.localPosition = new Vector3(0, 1.75f, 0);
             }
 
             if (onGround && Input.GetKeyDown(KeyCode.Space))
