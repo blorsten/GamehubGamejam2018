@@ -11,14 +11,14 @@ public class GameManager : PUNSingleton<GameManager>
     public PhotonView Owner { get; set; }
     public List<PlayerController> Players { get; set; }
     public PlayerController localPlayer { get; set; }
-    public SpawnPoint[] spawnPoints;
+    private SpawnPoint[] spawnPoints;
 
     public Action Respawn;
 
     // Use this for initialization
     void Start()
     {
-        spawnPoints = FindObjectsOfType<SpawnPoint>();
+        spawnPoints = FindObjectsOfType<SpawnPoint>().Where(point => point.gameObject.activeSelf).ToArray();
 
         Owner = GetComponent<PhotonView>();
 
@@ -72,7 +72,8 @@ public class GameManager : PUNSingleton<GameManager>
         for (var index = 0; index < Players.Count; index++)
         {
             PlayerController playerController = Players[index];
-            playerController.pw.RPC("RPCRespawn", PhotonTargets.All, spawnPoints[index].transform.position);
+            Transform transformPosition = spawnPoints[index].transform;
+            playerController.pw.RPC("RPCRespawn", PhotonTargets.All, transformPosition.position, transformPosition.rotation.eulerAngles.y);
         }
     }
 

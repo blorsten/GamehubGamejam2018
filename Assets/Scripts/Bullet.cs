@@ -18,7 +18,8 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (_owner.isMine && controller.playerMode == PlayerMode.Spectator)
+            PhotonNetwork.Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,13 +33,7 @@ public class Bullet : MonoBehaviour
             if (otherPlayer != controller)
             {
                 otherPlayer.pw.RPC("RPCKill", PhotonTargets.All);
-                PhotonNetwork.Destroy(gameObject);
             }
-        }
-
-        if (other.tag == "Ground")
-        {
-            PhotonNetwork.Destroy(gameObject);
         }
 
         if (other.CompareTag("Mineral"))
@@ -47,9 +42,10 @@ public class Bullet : MonoBehaviour
             {
                 var mineral = other.GetComponent<Mineral>();
                 mineral.Owner.RPC("RPCDisable", PhotonTargets.All);
-                PhotonNetwork.Destroy(_owner);
                 IsDestroyed = true;
             }
         }
+
+        PhotonNetwork.Destroy(_owner);
     }
 }

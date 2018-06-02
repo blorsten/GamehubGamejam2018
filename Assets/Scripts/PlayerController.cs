@@ -74,10 +74,11 @@ public class PlayerController : MonoBehaviour
     }
 
     [PunRPC]
-    public void RPCRespawn(Vector3 spawnPos)
+    public void RPCRespawn(Vector3 spawnPos, float rotationY)
     {
         SetPlayerMode(PlayerMode.Normal);
         transform.position = spawnPos;
+        rotY = rotationY;
         rb.velocity = Vector3.zero;
     }
 
