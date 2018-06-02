@@ -21,7 +21,8 @@ public class Bullet : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            PhotonNetwork.Destroy(other.gameObject);
+            var otherPlayer = other.gameObject.transform.parent.GetComponent<PlayerController>();
+            GameManager.Instance.KillPlayer(otherPlayer);
         }
 
         if (other.tag == "Ground")

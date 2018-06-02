@@ -13,7 +13,7 @@ public class MenuProxy : MonoBehaviour
     {
         SearchButton.gameObject.SetActive(!PhotonNetwork.connected && !PUNManager.Instance.SearchingForMatch);
         inputField.gameObject.SetActive(!PhotonNetwork.connected && !PUNManager.Instance.SearchingForMatch);
-        StartButton.gameObject.SetActive(PhotonNetwork.inRoom);
+        StartButton.gameObject.SetActive(PhotonNetwork.inRoom && PhotonNetwork.isMasterClient);
     }
 
     public void SearchForMatch()

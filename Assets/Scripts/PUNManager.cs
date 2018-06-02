@@ -60,8 +60,8 @@ public class PUNManager : PUNSingleton<PUNManager>
             Hashtable ht = new Hashtable();
             ht.Add("START", true);
             PhotonNetwork.room.SetCustomProperties(ht);
-            PhotonNetwork.room.IsVisible = false;
-            PhotonNetwork.room.IsOpen = false;
+            //PhotonNetwork.room.IsVisible = false;
+            //PhotonNetwork.room.IsOpen = false;
         }
     }
 }
