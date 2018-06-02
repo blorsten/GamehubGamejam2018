@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float speed;
+    public float crouchSpeed = 3;
     public Transform HeadTrans;
     [SerializeField]
     private float jumpForce;
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public float clampAngle = 80.0f;
     private float rotY = 0.0f; // rotation around the up/y axis
     private float rotX = 0.0f; // rotation around the right/x axis
+    private bool _isCrouching;
 
     void Awake()
     {
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+
         if (!PhotonNetwork.connected)
             Destroy(gameObject);
 
@@ -46,6 +49,8 @@ public class PlayerController : MonoBehaviour
             rotX = rot.x;
         }
 
+            GameManager.Instance.localPlayer = this;
+        if (pw.isMine)
         GameManager.Instance.RespawnPlayers();
     }
 
@@ -83,18 +88,26 @@ public class PlayerController : MonoBehaviour
     {
         if (pw.isMine)
         {
+            var x = Input.GetAxis("Horizontal");
+            var y = Input.GetAxis("Vertical");
+
             if (Input.GetKey(KeyCode.LeftControl))
             {
+                _isCrouching = true;
                 playerModel.localScale = new Vector3(1, .5f, 1);
                 playerModel.localPosition = new Vector3(0, .5f, 0);
                 HeadTrans.localPosition = new Vector3(0, .75f, 0);
             }
             else
             {
+                _isCrouching = false;
                 playerModel.localScale = new Vector3(1, 1, 1);
                 playerModel.localPosition = new Vector3(0, 1, 0);
                 HeadTrans.localPosition = new Vector3(0, 1.5f, 0);
             }
+
+            if (onGround && Input.GetKeyDown(KeyCode.Space))
+                rb.AddForce(transform.up * jumpForce);
 
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = -Input.GetAxis("Mouse Y");
@@ -124,7 +137,7 @@ public class PlayerController : MonoBehaviour
             if (onGround && Input.GetKeyDown(KeyCode.Space))
                 rb.AddForce(transform.up * jumpForce);
 
-            rb.MovePosition(transform.position + newPos * speed * Time.deltaTime);
+            rb.MovePosition(transform.position + newPos * (_isCrouching ? crouchSpeed : speed) * Time.deltaTime);
         }
     }
 

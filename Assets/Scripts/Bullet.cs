@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public PlayerController controller;
     public PhotonView _owner;
 
     public bool IsDestroyed { get; set; }
@@ -28,8 +29,11 @@ public class Bullet : MonoBehaviour
         if (other.tag == "Player")
         {
             var otherPlayer = other.gameObject.transform.parent.GetComponent<PlayerController>();
-            otherPlayer.pw.RPC("RPCKill", PhotonTargets.All);
-            PhotonNetwork.Destroy(gameObject);
+            if (otherPlayer != controller)
+            {
+                otherPlayer.pw.RPC("RPCKill", PhotonTargets.All);
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
 
         if (other.tag == "Ground")
