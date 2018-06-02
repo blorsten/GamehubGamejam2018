@@ -125,7 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 23247375894003570}
   collider: {fileID: 65211493740473606}
-  _owner: {fileID: 0}
+  _owner: {fileID: 114478359992149762}
 --- !u!114 &114478359992149762
 MonoBehaviour:
   m_ObjectHideFlags: 1
