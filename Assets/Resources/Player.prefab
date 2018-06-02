@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4733024880807482}
   - component: {fileID: 33199534188589752}
   - component: {fileID: 23788262694378366}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4583895977989254}
   - component: {fileID: 114324485704886700}
   - component: {fileID: 120294093138573474}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4422742057045708}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 114213612866042584}
   - component: {fileID: 114803131671407590}
   - component: {fileID: 54661827982097536}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 33764861616663620}
   - component: {fileID: 136702912611235166}
   - component: {fileID: 23654595586279508}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Capsule
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4556623227027546}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1450456159682794}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2.1447144, y: -1.6331196, z: -3.4511063}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4528127276112066}
@@ -337,9 +337,9 @@ MonoBehaviour:
   _owner: {fileID: 114924210035421300}
   __bullet: {fileID: 114259226596007026, guid: 61aa87a68dcff3c439534840310284af, type: 2}
   _shootForce: 1000
-  _reloadDistance: 2
-  _reloadDuration: 2
-  _reloadDistanceUntilBreak: 0.5
+  _reloadDistance: 3
+  _reloadDuration: 1.5
+  _reloadDistanceUntilBreak: 0.7
 --- !u!114 &114803131671407590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -440,7 +440,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2807d425a6bafd3488fa067392dd4d6f, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -463,7 +463,7 @@ LineRenderer:
   m_Positions: []
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.37
+    widthMultiplier: 0.1
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -475,18 +475,18 @@ LineRenderer:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 4
+      m_RotationOrder: 0
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 1, g: 0.66176474, b: 0.1544118, a: 1}
+      key1: {r: 0.20588237, g: 0.6713994, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 0
+      ctime0: 29298
       ctime1: 65535
       ctime2: 0
       ctime3: 0

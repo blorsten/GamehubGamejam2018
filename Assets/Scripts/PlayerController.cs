@@ -27,13 +27,16 @@ public class PlayerController : MonoBehaviour
     private float rotY = 0.0f; // rotation around the up/y axis
     private float rotX = 0.0f; // rotation around the right/x axis
 
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        pw = GetComponent<PhotonView>();
+    }
+
     private void Start()
     {
         if (!PhotonNetwork.connected)
             Destroy(gameObject);
-
-        rb = GetComponent<Rigidbody>();
-        pw = GetComponent<PhotonView>();
 
         if (pw.isMine)
         {
@@ -43,8 +46,7 @@ public class PlayerController : MonoBehaviour
             rotX = rot.x;
         }
 
-        Respawn();
-        SetPlayerMode(playerMode);
+        GameManager.Instance.RespawnPlayers();
     }
 
     public void SetPlayerMode(PlayerMode mode)
@@ -68,12 +70,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Respawn()
+    [PunRPC]
+    public void RPCRespawn(Vector3 spawnPos)
     {
-        if (!pw.isMine)
-            return;
-
-        transform.position = GameManager.Instance.spawnPoints[pw.ownerId - 1].transform.position;
+        SetPlayerMode(PlayerMode.Normal);
+        transform.position = spawnPos;
         rb.velocity = Vector3.zero;
     }
 

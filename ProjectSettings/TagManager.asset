@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Projectile
+  - Mineral
   layers:
   - Default
   - TransparentFX
@@ -19,8 +20,6 @@ TagManager:
   - Player
   - Spectator
   - Mineral
-  - 
-  - 
   - 
   - 
   - 

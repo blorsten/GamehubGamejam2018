@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private PhotonView _owner;
+    public PhotonView _owner;
+
+    public bool IsDestroyed { get; set; }
 
     // Use this for initialization
     void Start()
@@ -33,6 +35,17 @@ public class Bullet : MonoBehaviour
         if (other.tag == "Ground")
         {
             PhotonNetwork.Destroy(gameObject);
+        }
+
+        if (other.CompareTag("Mineral"))
+        {
+            if (!IsDestroyed)
+            {
+                var mineral = other.GetComponent<Mineral>();
+                mineral.Owner.RPC("RPCDisable", PhotonTargets.All);
+                PhotonNetwork.Destroy(_owner);
+                IsDestroyed = true;
+            }
         }
     }
 }

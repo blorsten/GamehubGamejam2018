@@ -4,8 +4,8 @@ using Photon;
 
 public class Mineral : PunBehaviour
 {
+    private Collider _collider;
     [SerializeField] private MeshRenderer _meshRenderer;
-    public BoxCollider collider;
     [SerializeField] private PhotonView _owner;
 
     public PhotonView Owner
@@ -15,12 +15,13 @@ public class Mineral : PunBehaviour
 
     private void Start()
     {
+        _collider = GetComponent<Collider>();
         GameManager.Instance.Respawn += OnRespawn;
     }
 
     public void Disable()
     {
-        collider.enabled = false;
+        _collider.enabled = false;
         _meshRenderer.enabled = false;
         _meshRenderer.UpdateGIMaterials();
     }
@@ -33,21 +34,9 @@ public class Mineral : PunBehaviour
 
     private void OnRespawn()
     {
-        collider.enabled = true;
+        _collider.enabled = true;
         _meshRenderer.enabled = true;
         _meshRenderer.UpdateGIMaterials();
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!_owner.isMine)
-            return;
-
-        if (other.CompareTag("Projectile"))
-        {
-            _owner.RPC("RPCDisable", PhotonTargets.All);
-            PhotonNetwork.Destroy(other.GetComponent<PhotonView>());
-        }
     }
 
     void OnDestroy()
