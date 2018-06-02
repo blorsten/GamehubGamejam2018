@@ -8,12 +8,12 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float speed;
-    [SerializeField]
-    public Transform camTrans;
+    public Transform HeadTrans;
     [SerializeField]
     private float jumpForce;
     [SerializeField]
-    private Transform model;
+    private Transform playerModel;
+    public Transform GunModel;
 
     public GameObject playerCam;
 
@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
 
         if (pw.isMine)
         {
-            camTrans = Instantiate(playerCam, transform).transform;
-            Vector3 rot = camTrans.localRotation.eulerAngles;
+            Instantiate(playerCam, HeadTrans);
+            Vector3 rot = HeadTrans.localRotation.eulerAngles;
             rotY = rot.y;
             rotX = rot.x;
         }
@@ -56,11 +56,13 @@ public class PlayerController : MonoBehaviour
         switch (playerMode)
         {
             case PlayerMode.Normal:
-                model.GetComponent<MeshRenderer>().enabled = true;
+                playerModel.GetComponent<MeshRenderer>().enabled = true;
+                GunModel.GetComponent<MeshRenderer>().enabled = true;
                 gameObject.layer = LayerMask.NameToLayer("Player");
                 break;
             case PlayerMode.Spectator:
-                model.GetComponent<MeshRenderer>().enabled = false;
+                playerModel.GetComponent<MeshRenderer>().enabled = false;
+                GunModel.GetComponent<MeshRenderer>().enabled = false;
                 gameObject.layer = LayerMask.NameToLayer("Spectator");
                 break;
         }
@@ -72,7 +74,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         transform.position = GameManager.Instance.spawnPoints[pw.ownerId - 1].transform.position;
-        transform.LookAt(new Vector3(0, camTrans.position.y, 0));
+        transform.LookAt(GameManager.Instance.transform);
     }
 
     // Update is called once per frame
@@ -91,15 +93,15 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
-                model.localScale = new Vector3(1, .5f, 1);
-                model.localPosition = new Vector3(0, .5f, 0);
-                camTrans.localPosition = new Vector3(0, .75f, 0);
+                playerModel.localScale = new Vector3(1, .5f, 1);
+                playerModel.localPosition = new Vector3(0, .5f, 0);
+                HeadTrans.localPosition = new Vector3(0, .75f, 0);
             }
             else
             {
-                model.localScale = new Vector3(1, 1, 1);
-                model.localPosition = new Vector3(0, 1, 0);
-                camTrans.localPosition = new Vector3(0, 1.5f, 0);
+                playerModel.localScale = new Vector3(1, 1, 1);
+                playerModel.localPosition = new Vector3(0, 1, 0);
+                HeadTrans.localPosition = new Vector3(0, 1.5f, 0);
             }
 
             rb.MovePosition(newPos);
@@ -113,7 +115,7 @@ public class PlayerController : MonoBehaviour
             rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
             Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0.0f);
-            camTrans.rotation = localRotation;
+            HeadTrans.rotation = localRotation;
 
             rb.MoveRotation(Quaternion.Euler(0, rotY, 0));
 

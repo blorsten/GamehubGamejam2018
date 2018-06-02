@@ -32,10 +32,14 @@ public class GameManager : PUNSingleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-        if (Players.Count != PhotonNetwork.room.PlayerCount)
+        if (PhotonNetwork.inRoom && Players.Count != PhotonNetwork.room.PlayerCount)
         {
             Players.Clear();
             var all = FindObjectsOfType<PlayerController>().ToList();
+
+            if (!all.Any())
+                return;
+
             all.ForEach(x => Players.Add(x));
         }
 

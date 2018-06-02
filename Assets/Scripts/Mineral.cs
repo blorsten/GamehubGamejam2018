@@ -13,16 +13,16 @@ public class Mineral : MonoBehaviour
 
     private void OnRespawn()
     {
-        gameObject.SetActive(true);
         _meshRenderer.UpdateGIMaterials();
+        gameObject.SetActive(true);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Projectile"))
         {
-            gameObject.SetActive(false);
             _meshRenderer.UpdateGIMaterials();
+            gameObject.SetActive(false);
             PhotonNetwork.Destroy(other.GetComponent<PhotonView>());
         }
     }

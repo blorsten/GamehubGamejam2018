@@ -37,9 +37,9 @@ public class Gun : PunBehaviour, IPunObservable
         //Shoot
         if (_owner.playerMode == PlayerMode.Normal && Input.GetMouseButtonDown(0) && !_isOutOfAmmo)
         {
-            var camTrans = _owner.camTrans;
-            var go = PhotonNetwork.Instantiate("Bullet", camTrans.position + camTrans.forward, Quaternion.identity, 0);
-            go.GetComponent<Rigidbody>().AddForce(camTrans.forward * _shootForce);
+            var HeadTrans = _owner.HeadTrans;
+            var go = PhotonNetwork.Instantiate("Bullet", HeadTrans.position + HeadTrans.forward, Quaternion.identity, 0);
+            go.GetComponent<Rigidbody>().AddForce(HeadTrans.forward * _shootForce);
 
             _isOutOfAmmo = true;
         }
@@ -50,8 +50,8 @@ public class Gun : PunBehaviour, IPunObservable
             if (!_targetMineral)
             {
                 var hits = Physics.RaycastNonAlloc(
-                    _owner.camTrans.transform.position,
-                    _owner.camTrans.forward,
+                    _owner.HeadTrans.transform.position,
+                    _owner.HeadTrans.forward,
                     _targetRaycasts,
                     _reloadDistance, LayerMask.GetMask("Mineral"));
 
