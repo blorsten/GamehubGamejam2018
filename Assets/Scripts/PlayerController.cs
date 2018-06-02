@@ -64,10 +64,12 @@ public class PlayerController : MonoBehaviour
                 playerModel.GetComponent<MeshRenderer>().enabled = true;
                 GunModel.GetComponent<MeshRenderer>().enabled = true;
                 gameObject.layer = LayerMask.NameToLayer("Player");
+                playerModel.gameObject.layer = LayerMask.NameToLayer("Player");
                 break;
             case PlayerMode.Spectator:
                 playerModel.GetComponent<MeshRenderer>().enabled = false;
                 GunModel.GetComponent<MeshRenderer>().enabled = false;
+                playerModel.gameObject.layer = LayerMask.NameToLayer("Spectator");
                 gameObject.layer = LayerMask.NameToLayer("Spectator");
                 break;
         }
