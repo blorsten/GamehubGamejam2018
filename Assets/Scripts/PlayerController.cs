@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         transform.position = GameManager.Instance.spawnPoints[pw.ownerId - 1].transform.position;
-        transform.LookAt(GameManager.Instance.transform);
+        rb.velocity = Vector3.zero;
     }
 
     // Update is called once per frame
@@ -120,6 +120,12 @@ public class PlayerController : MonoBehaviour
             rb.MoveRotation(Quaternion.Euler(0, rotY, 0));
 
         }
+    }
+
+    [PunRPC]
+    public void RPCKill()
+    {
+        GameManager.Instance.KillPlayer(this);
     }
 
     private void OnCollisionEnter(Collision collision)

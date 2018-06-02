@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    private PhotonView _owner;
 
     // Use this for initialization
     void Start()
     {
-
+        _owner = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
@@ -19,10 +20,14 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!_owner.isMine)
+            return;
+
         if (other.tag == "Player")
         {
             var otherPlayer = other.gameObject.transform.parent.GetComponent<PlayerController>();
-            GameManager.Instance.KillPlayer(otherPlayer);
+            otherPlayer.pw.RPC("RPCKill", PhotonTargets.All);
+            PhotonNetwork.Destroy(gameObject);
         }
 
         if (other.tag == "Ground")

@@ -8,6 +8,11 @@ public class Mineral : PunBehaviour
     public BoxCollider collider;
     [SerializeField] private PhotonView _owner;
 
+    public PhotonView Owner
+    {
+        get { return _owner; }
+    }
+
     private void Start()
     {
         GameManager.Instance.Respawn += OnRespawn;
@@ -20,6 +25,12 @@ public class Mineral : PunBehaviour
         _meshRenderer.UpdateGIMaterials();
     }
 
+    [PunRPC]
+    public void RPCDisable()
+    {
+        Disable();
+    }
+
     private void OnRespawn()
     {
         collider.enabled = true;
@@ -29,15 +40,18 @@ public class Mineral : PunBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!_owner.isMine)
+            return;
+
         if (other.CompareTag("Projectile"))
         {
-            Disable();
+            _owner.RPC("RPCDisable", PhotonTargets.All);
             PhotonNetwork.Destroy(other.GetComponent<PhotonView>());
         }
     }
 
     void OnDestroy()
     {
-        GameManager.Instance.Respawn -= OnRespawn;
+        if (GameManager.Instance != null) GameManager.Instance.Respawn -= OnRespawn;
     }
 }

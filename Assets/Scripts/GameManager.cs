@@ -1,26 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Photon;
 using System.Linq;
 using System;
 
 public class GameManager : PUNSingleton<GameManager>
 {
-    public static GameManager Instance { get; set; }
+    public PhotonView Owner { get; set; }
     public List<PlayerController> Players { get; set; }
     public List<SpawnPoint> spawnPoints;
 
     public Action Respawn;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     // Use this for initialization
     void Start()
     {
+        Owner = GetComponent<PhotonView>();
+
         if (PhotonNetwork.connected)
             PhotonNetwork.Instantiate("Player", new Vector3(0, 0.6f, 0), Quaternion.identity, 0);
 
@@ -57,7 +52,7 @@ public class GameManager : PUNSingleton<GameManager>
 
         go.SetPlayerMode(PlayerMode.Spectator);
 
-        int count = Players.Where(x => x.playerMode == PlayerMode.Normal).Count();
+        int count = Players.Count(x => x.playerMode == PlayerMode.Normal);
         if (PhotonNetwork.room.PlayerCount > 1)
         {
             if (count <= 1)
@@ -66,20 +61,6 @@ public class GameManager : PUNSingleton<GameManager>
                 if (spawnPoints.Count >= Players.Count)
                     foreach (var player in Players)
                     {
-                        player.Respawn();
-                        player.SetPlayerMode(PlayerMode.Normal);
-                    }
-            }
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                Respawn.Invoke();
-                if (spawnPoints.Count >= Players.Count)
-                    foreach (var player in Players)
-                    {
-                        Respawn.Invoke();
                         player.Respawn();
                         player.SetPlayerMode(PlayerMode.Normal);
                     }

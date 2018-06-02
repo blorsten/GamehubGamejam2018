@@ -8,8 +8,7 @@ public class Gun : PunBehaviour, IPunObservable
     private float _gatheringTimer;
 
     private RaycastHit[] _targetRaycasts = new RaycastHit[1];
-    private RaycastHit? _targetRaycastHit;
-    private Vector3? _targetRayCastPoint;
+    private Vector3 _targetRayCastPoint;
     private Mineral _targetMineral;
 
     [SerializeField] private Transform _gunBarrel;
@@ -21,13 +20,23 @@ public class Gun : PunBehaviour, IPunObservable
     [SerializeField] private float _reloadDuration;
     [SerializeField] private float _reloadDistanceUntilBreak;
 
+    void Start()
+    {
+        GameManager.Instance.Respawn += OnRespawn;
+    }
+
+    private void OnRespawn()
+    {
+        _isOutOfAmmo = false;
+    }
+
     void Update()
     {
-        if (_targetRayCastPoint != null)
+        if (_targetRayCastPoint != Vector3.zero)
         {
             _lineRenderer.positionCount = 2;
             _lineRenderer.SetPosition(0, _gunBarrel.transform.position);
-            _lineRenderer.SetPosition(1, _targetRayCastPoint.Value);
+            _lineRenderer.SetPosition(1, _targetRayCastPoint);
         }
         else
             _lineRenderer.positionCount = 0;
@@ -58,9 +67,9 @@ public class Gun : PunBehaviour, IPunObservable
 
                 if (hits == 1)
                 {
-                    _targetRaycastHit = _targetRaycasts[0];
-                    _targetRayCastPoint = _targetRaycastHit.Value.point;
-                    _targetMineral = _targetRaycastHit.Value.transform.GetComponent<Mineral>();
+                    var raycastHit = _targetRaycasts[0];
+                    _targetRayCastPoint = raycastHit.point;
+                    _targetMineral = raycastHit.transform.GetComponent<Mineral>();
                     _gatherPosition = _owner.transform.position;
                 }
             }
@@ -94,13 +103,13 @@ public class Gun : PunBehaviour, IPunObservable
     private void FinishGathering(bool success)
     {
         if (success)
-            _targetMineral.Disable();
+            _targetMineral.Owner.RPC("RPCDisable", PhotonTargets.All);
 
         _isOutOfAmmo = !success;
         _targetMineral = null;
         _gatheringTimer = 0;
         _gatherPosition = null;
-        _targetRaycastHit = null;
+        _targetRayCastPoint = Vector3.zero;
         _lineRenderer.positionCount = 0;
     }
 
@@ -108,13 +117,16 @@ public class Gun : PunBehaviour, IPunObservable
     {
         if (stream.isWriting)
         {
-            stream.SendNext(_targetRaycastHit.Value.point);
+            stream.SendNext(_targetRayCastPoint);
         }
-        else if (!stream.isWriting)
+        else
         {
-            var next = stream.ReceiveNext();
-            if (next != null)
-                _targetRayCastPoint = (Vector3)next;
+            _targetRayCastPoint = (Vector3) stream.ReceiveNext();
         }
+    }
+    
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.Respawn += OnRespawn;
     }
 }
