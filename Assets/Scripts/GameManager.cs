@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon;
 using System.Linq;
+using System;
 
 public class GameManager : PUNSingleton<GameManager>
 {
     public static GameManager Instance { get; set; }
     public List<PlayerController> Players { get; set; }
     public List<SpawnPoint> spawnPoints;
+
+    public Action Respawn;
 
     private void Awake()
     {
@@ -51,15 +54,32 @@ public class GameManager : PUNSingleton<GameManager>
         go.SetPlayerMode(PlayerMode.Spectator);
 
         int count = Players.Where(x => x.playerMode == PlayerMode.Normal).Count();
-
-        if (count <= 1)
+        if (PhotonNetwork.room.PlayerCount > 1)
         {
-            if (spawnPoints.Count >= Players.Count)
-                foreach (var player in Players)
-                {
-                    player.Respawn();
-                    player.SetPlayerMode(PlayerMode.Normal);
-                }
+            if (count <= 1)
+            {
+                Respawn.Invoke();
+                if (spawnPoints.Count >= Players.Count)
+                    foreach (var player in Players)
+                    {
+                        player.Respawn();
+                        player.SetPlayerMode(PlayerMode.Normal);
+                    }
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                Respawn.Invoke();
+                if (spawnPoints.Count >= Players.Count)
+                    foreach (var player in Players)
+                    {
+                        Respawn.Invoke();
+                        player.Respawn();
+                        player.SetPlayerMode(PlayerMode.Normal);
+                    }
+            }
         }
     }
 

@@ -26,6 +26,15 @@ public class PUNManager : PUNSingleton<PUNManager>
         SearchingForMatch = true;
     }
 
+    public void CancelSearch()
+    {
+        if (PhotonNetwork.inRoom)
+        {
+            PhotonNetwork.Disconnect();
+            SearchingForMatch = false;
+        }
+    }
+
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
