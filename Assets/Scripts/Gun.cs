@@ -1,14 +1,14 @@
 ﻿using Photon;
 using UnityEngine;
 
-public class Gun : PunBehaviour
+public class Gun : PunBehaviour, IPunObservable
 {
     private Vector3? _gatherPosition;
     private bool _isOutOfAmmo;
     private float _gatheringTimer;
 
     private RaycastHit[] _targetRaycasts = new RaycastHit[1];
-    private RaycastHit _targetRaycastHit;
+    private RaycastHit? _targetRaycastHit;
     private Mineral _targetMineral;
 
     [SerializeField] private Transform _gunBarrel;
@@ -22,6 +22,15 @@ public class Gun : PunBehaviour
 
     void Update()
     {
+        if (_targetRaycastHit != null)
+        {
+            _lineRenderer.positionCount = 2;
+            _lineRenderer.SetPosition(0, _gunBarrel.transform.position);
+            _lineRenderer.SetPosition(1, _targetRaycastHit.Value.point);
+        }
+        else
+            _lineRenderer.positionCount = 0;
+
         if (!_owner.Pw.isMine || !PhotonNetwork.connected)
             return;
 
@@ -49,11 +58,8 @@ public class Gun : PunBehaviour
                 if (hits == 1)
                 {
                     _targetRaycastHit = _targetRaycasts[0];
-                    _targetMineral = _targetRaycastHit.transform.GetComponent<Mineral>();
+                    _targetMineral = _targetRaycastHit.Value.transform.GetComponent<Mineral>();
                     _gatherPosition = _owner.transform.position;
-
-                    _lineRenderer.positionCount = 2;
-                    _lineRenderer.SetPosition(1, _targetRaycastHit.point);
                 }
             }
         }
@@ -62,9 +68,6 @@ public class Gun : PunBehaviour
         {
             //We're gathering!
             _gatheringTimer += Time.deltaTime / _reloadDuration;
-
-            //Update the linerenderer first position
-            _lineRenderer.SetPosition(0, _gunBarrel.transform.position);
 
             //Did we finish gathering?
             if (_gatheringTimer >= 1)
@@ -95,6 +98,19 @@ public class Gun : PunBehaviour
         _targetMineral = null;
         _gatheringTimer = 0;
         _gatherPosition = null;
+        _targetRaycastHit = null;
         _lineRenderer.positionCount = 0;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(_targetRaycastHit);
+        }
+        else
+        {
+            _targetRaycastHit = (RaycastHit) stream.ReceiveNext();
+        }
     }
 }
