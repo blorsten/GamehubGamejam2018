@@ -83,15 +83,6 @@ public class PlayerController : MonoBehaviour
     {
         if (pw.isMine)
         {
-            var x = Input.GetAxis("Horizontal");
-            var y = Input.GetAxis("Vertical");
-
-            Vector3 newPos = transform.position + transform.forward * y * speed * Time.deltaTime;
-            newPos += transform.right * x * speed * Time.deltaTime;
-
-            if (onGround && Input.GetKeyDown(KeyCode.Space))
-                rb.AddForce(transform.up * jumpForce);
-
             if (Input.GetKey(KeyCode.LeftControl))
             {
                 playerModel.localScale = new Vector3(1, .5f, 1);
@@ -105,8 +96,6 @@ public class PlayerController : MonoBehaviour
                 HeadTrans.localPosition = new Vector3(0, 1.5f, 0);
             }
 
-            rb.MovePosition(newPos);
-
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = -Input.GetAxis("Mouse Y");
 
@@ -119,7 +108,23 @@ public class PlayerController : MonoBehaviour
             HeadTrans.rotation = localRotation;
 
             rb.MoveRotation(Quaternion.Euler(0, rotY, 0));
+        }
+    }
 
+    void FixedUpdate()
+    {
+        if (pw.isMine)
+        {
+            var x = Input.GetAxis("Horizontal");
+            var y = Input.GetAxis("Vertical");
+
+            Vector3 newPos = transform.forward * y;
+            newPos += transform.right * x;
+
+            if (onGround && Input.GetKeyDown(KeyCode.Space))
+                rb.AddForce(transform.up * jumpForce);
+
+            rb.MovePosition(transform.position + newPos * speed * Time.deltaTime);
         }
     }
 
