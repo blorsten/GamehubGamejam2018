@@ -7,16 +7,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float speed;
     [SerializeField]
-    private float shootForce;
-    [SerializeField]
-    private Transform camTrans;
+    public Transform camTrans;
     [SerializeField]
     private float jumpForce;
     [SerializeField]
     private Transform model;
 
     private Rigidbody rb;
-    private PhotonView pw;
+    public PhotonView Pw { get; private set; }
 
     public float mouseSensitivity = 100.0f;
     public float clampAngle = 80.0f;
@@ -27,8 +25,11 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        if (!PhotonNetwork.connected)
+            Destroy(gameObject);
+
         rb = GetComponent<Rigidbody>();
-        pw = GetComponent<PhotonView>();
+        Pw = GetComponent<PhotonView>();
 
         Vector3 rot = camTrans.localRotation.eulerAngles;
         rotY = rot.y;
@@ -58,20 +59,14 @@ public class PlayerController : MonoBehaviour
 
         rb.MoveRotation(Quaternion.Euler(0, rotY, 0));
 
-        if (pw.isMine)
+        if (Pw.isMine)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                var go = PhotonNetwork.Instantiate("Bullet", camTrans.position + camTrans.forward, Quaternion.identity, 0);
-                go.GetComponent<Rigidbody>().AddForce(camTrans.forward * shootForce);
-            }
-
             if (onGround && Input.GetKeyDown(KeyCode.Space))
             {
                 rb.AddForce(transform.up * jumpForce);
             }
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftControl))
             {
                 model.localScale = new Vector3(1, .5f, 1);
                 model.localPosition = new Vector3(0, .5f, 0);
