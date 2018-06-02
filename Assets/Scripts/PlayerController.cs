@@ -48,8 +48,6 @@ public class PlayerController : MonoBehaviour
             rotX = rot.x;
             GameManager.Instance.localPlayer = this;
         }
-
-        GameManager.Instance.RespawnPlayers();
     }
 
     public void SetPlayerMode(PlayerMode mode)

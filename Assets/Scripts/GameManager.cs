@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class GameManager : PUNSingleton<GameManager>
 {
+    private bool _finishedSetup;
+
     public PhotonView Owner { get; set; }
     public List<PlayerController> Players { get; set; }
     public PlayerController localPlayer { get; set; }
@@ -34,6 +36,12 @@ public class GameManager : PUNSingleton<GameManager>
     void Update()
     {
         UpdatePlayerList();
+
+        if (!_finishedSetup && Players.Count == PhotonNetwork.room.PlayerCount)
+        {
+            RespawnPlayers();
+            _finishedSetup = true;
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
