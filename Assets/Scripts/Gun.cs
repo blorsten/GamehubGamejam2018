@@ -50,6 +50,7 @@ public class Gun : PunBehaviour, IPunObservable
             var HeadTrans = _owner.HeadTrans;
             var go = PhotonNetwork.Instantiate("Bullet", HeadTrans.position + HeadTrans.forward, Quaternion.identity, 0);
             go.GetComponent<Rigidbody>().AddForce(HeadTrans.forward * _shootForce);
+            go.GetComponent<Bullet>().controller = _owner;
 
             _isOutOfAmmo = true;
         }
@@ -121,10 +122,10 @@ public class Gun : PunBehaviour, IPunObservable
         }
         else
         {
-            _targetRayCastPoint = (Vector3) stream.ReceiveNext();
+            _targetRayCastPoint = (Vector3)stream.ReceiveNext();
         }
     }
-    
+
     private void OnDestroy()
     {
         if (GameManager.Instance != null) GameManager.Instance.Respawn += OnRespawn;

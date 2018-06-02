@@ -8,6 +8,7 @@ public class GameManager : PUNSingleton<GameManager>
 {
     public PhotonView Owner { get; set; }
     public List<PlayerController> Players { get; set; }
+    public PlayerController localPlayer { get; set; }
     public SpawnPoint[] spawnPoints;
 
     public Action Respawn;

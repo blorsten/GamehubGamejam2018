@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float speed;
+    public float crouchSpeed = 3;
     public Transform HeadTrans;
     [SerializeField]
     private float jumpForce;
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+
         if (!PhotonNetwork.connected)
             Destroy(gameObject);
 
@@ -46,6 +48,8 @@ public class PlayerController : MonoBehaviour
             rotX = rot.x;
         }
 
+            GameManager.Instance.localPlayer = this;
+        if (pw.isMine)
         GameManager.Instance.RespawnPlayers();
     }
 
@@ -85,15 +89,11 @@ public class PlayerController : MonoBehaviour
         {
             var x = Input.GetAxis("Horizontal");
             var y = Input.GetAxis("Vertical");
-
-            Vector3 newPos = transform.position + transform.forward * y * speed * Time.deltaTime;
-            newPos += transform.right * x * speed * Time.deltaTime;
-
-            if (onGround && Input.GetKeyDown(KeyCode.Space))
-                rb.AddForce(transform.up * jumpForce);
+            float movementSpeed = speed;
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
+                movementSpeed = crouchSpeed;
                 playerModel.localScale = new Vector3(1, .5f, 1);
                 playerModel.localPosition = new Vector3(0, .5f, 0);
                 HeadTrans.localPosition = new Vector3(0, .75f, 0);
@@ -104,6 +104,12 @@ public class PlayerController : MonoBehaviour
                 playerModel.localPosition = new Vector3(0, 1, 0);
                 HeadTrans.localPosition = new Vector3(0, 1.5f, 0);
             }
+
+            Vector3 newPos = transform.position + transform.forward * y * movementSpeed * Time.deltaTime;
+            newPos += transform.right * x * movementSpeed * Time.deltaTime;
+
+            if (onGround && Input.GetKeyDown(KeyCode.Space))
+                rb.AddForce(transform.up * jumpForce);
 
             rb.MovePosition(newPos);
 
