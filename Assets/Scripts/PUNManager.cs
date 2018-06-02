@@ -13,6 +13,8 @@ public class PUNManager : PUNSingleton<PUNManager>
 
     private void Awake()
     {
+        PhotonNetwork.sendRate = 40;
+        PhotonNetwork.sendRateOnSerialize = 40;
         PhotonNetwork.autoJoinLobby = true;
         PhotonNetwork.automaticallySyncScene = true;
     }
