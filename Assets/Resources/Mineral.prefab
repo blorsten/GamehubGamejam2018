@@ -24,9 +24,9 @@ GameObject:
   - component: {fileID: 33151449515649630}
   - component: {fileID: 114978440694001036}
   - component: {fileID: 114301583275538754}
-  - component: {fileID: 114460770289145536}
-  - component: {fileID: 114731997407781564}
   - component: {fileID: 65211493740473606}
+  - component: {fileID: 114478359992149762}
+  - component: {fileID: 114479246208173730}
   m_Layer: 8
   m_Name: Mineral
   m_TagString: Untagged
@@ -124,8 +124,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 23247375894003570}
-  _owner: {fileID: 114460770289145536}
---- !u!114 &114460770289145536
+  collider: {fileID: 65211493740473606}
+  _owner: {fileID: 0}
+--- !u!114 &114478359992149762
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -145,14 +146,13 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 114301583275538754}
-  - {fileID: 114731997407781564}
+  - {fileID: 114479246208173730}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
---- !u!114 &114731997407781564
+--- !u!114 &114479246208173730
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

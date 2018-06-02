@@ -1,9 +1,11 @@
 ﻿using System;
 using UnityEngine;
+using Photon;
 
-public class Mineral : MonoBehaviour
+public class Mineral : PunBehaviour
 {
     [SerializeField] private MeshRenderer _meshRenderer;
+    public BoxCollider collider;
     [SerializeField] private PhotonView _owner;
 
     private void Start()
@@ -11,18 +13,25 @@ public class Mineral : MonoBehaviour
         GameManager.Instance.Respawn += OnRespawn;
     }
 
+    public void Disable()
+    {
+        collider.enabled = false;
+        _meshRenderer.enabled = false;
+        _meshRenderer.UpdateGIMaterials();
+    }
+
     private void OnRespawn()
     {
+        collider.enabled = true;
+        _meshRenderer.enabled = true;
         _meshRenderer.UpdateGIMaterials();
-        gameObject.SetActive(true);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Projectile"))
         {
-            _meshRenderer.UpdateGIMaterials();
-            gameObject.SetActive(false);
+            Disable();
             PhotonNetwork.Destroy(other.GetComponent<PhotonView>());
         }
     }

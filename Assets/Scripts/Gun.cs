@@ -9,6 +9,7 @@ public class Gun : PunBehaviour, IPunObservable
 
     private RaycastHit[] _targetRaycasts = new RaycastHit[1];
     private RaycastHit? _targetRaycastHit;
+    private Vector3? _targetRayCastPoint;
     private Mineral _targetMineral;
 
     [SerializeField] private Transform _gunBarrel;
@@ -22,11 +23,11 @@ public class Gun : PunBehaviour, IPunObservable
 
     void Update()
     {
-        if (_targetRaycastHit != null)
+        if (_targetRayCastPoint != null)
         {
             _lineRenderer.positionCount = 2;
             _lineRenderer.SetPosition(0, _gunBarrel.transform.position);
-            _lineRenderer.SetPosition(1, _targetRaycastHit.Value.point);
+            _lineRenderer.SetPosition(1, _targetRayCastPoint.Value);
         }
         else
             _lineRenderer.positionCount = 0;
@@ -58,6 +59,7 @@ public class Gun : PunBehaviour, IPunObservable
                 if (hits == 1)
                 {
                     _targetRaycastHit = _targetRaycasts[0];
+                    _targetRayCastPoint = _targetRaycastHit.Value.point;
                     _targetMineral = _targetRaycastHit.Value.transform.GetComponent<Mineral>();
                     _gatherPosition = _owner.transform.position;
                 }
@@ -92,7 +94,7 @@ public class Gun : PunBehaviour, IPunObservable
     private void FinishGathering(bool success)
     {
         if (success)
-            PhotonNetwork.Destroy(_targetMineral.gameObject);
+            _targetMineral.Disable();
 
         _isOutOfAmmo = !success;
         _targetMineral = null;
@@ -106,11 +108,13 @@ public class Gun : PunBehaviour, IPunObservable
     {
         if (stream.isWriting)
         {
-            stream.SendNext(_targetRaycastHit);
+            stream.SendNext(_targetRaycastHit.Value.point);
         }
-        else
+        else if (!stream.isWriting)
         {
-            _targetRaycastHit = (RaycastHit)stream.ReceiveNext();
+            var next = stream.ReceiveNext();
+            if (next != null)
+                _targetRayCastPoint = (Vector3)next;
         }
     }
 }
