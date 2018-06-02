@@ -19,6 +19,8 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
+        text.gameObject.SetActive(controller.playerMode == PlayerMode.Normal);
+
         var camPos = GameManager.Instance.localPlayer.transform.position;
         Vector3 target = new Vector3(camPos.x, transform.position.y, camPos.z);
         transform.LookAt(target);
