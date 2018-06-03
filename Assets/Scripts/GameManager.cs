@@ -30,8 +30,7 @@ public class GameManager : PUNSingleton<GameManager>
         Players = new List<PlayerController>();
         UpdatePlayerList();
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+
     }
 
     // Update is called once per frame
@@ -111,8 +110,7 @@ public class GameManager : PUNSingleton<GameManager>
 
     private void OnDestroy()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+
     }
 
     public void Shuffle<T>(IList<T> list)
