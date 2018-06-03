@@ -123,6 +123,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 191da04bbc1f35240a3a46c0873e7390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isBeingGathered: 0
+  _retract: 0
+  _retractCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.55487233
+      value: 0.89547944
+      inSlope: 5.413229
+      outSlope: 5.413229
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0.67863685
+      outSlope: 0.67863685
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  _startPos: {x: 0, y: 0, z: 0}
+  _startScale: {x: 0, y: 0, z: 0}
   _meshRenderer: {fileID: 23247375894003570}
   _owner: {fileID: 114478359992149762}
   _minSpawnDuration: 5
@@ -184,10 +212,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PositionModel:
-    SynchronizeEnabled: 0
-    TeleportEnabled: 1
+    SynchronizeEnabled: 1
+    TeleportEnabled: 0
     TeleportIfDistanceGreaterThan: 3
-    InterpolateOption: 2
+    InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 1
     InterpolateMoveTowardsAcceleration: 2

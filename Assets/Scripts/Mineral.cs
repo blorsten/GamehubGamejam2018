@@ -5,7 +5,16 @@ using Random = UnityEngine.Random;
 
 public class Mineral : PunBehaviour, IPunObservable
 {
-    private Vector3 _startScale;
+    public bool _isBeingGathered;
+
+    private float _retractTimer;
+    public bool _retract;
+    private Vector3 _retractScale;
+    private Vector3 _retractPos;
+    [SerializeField] private AnimationCurve _retractCurve;
+
+    public Vector3 _startPos;
+    public Vector3 _startScale;
     private float _timer;
     private float _spawnDuration;
     private Collider _collider;
@@ -14,18 +23,39 @@ public class Mineral : PunBehaviour, IPunObservable
     [SerializeField] private float _minSpawnDuration;
     [SerializeField] private float _maxSpawnDuration;
     [SerializeField] private AnimationCurve _animCurve;
+    private bool _isAvailable = true;
+    private bool _respawn;
 
     public PhotonView Owner
     {
         get { return _owner; }
     }
 
-    public bool IsAvailable { get; set; }
+    public bool IsAvailable
+    {
+        get { return _isAvailable; }
+        set { _isAvailable = value; }
+    }
+
+    public bool Respawn
+    {
+        get
+        {
+            return _respawn; 
+        }
+        set
+        {
+            _respawn = value;
+
+            if (_respawn)
+                transform.position = _startPos;
+        }
+    }
 
     private void Start()
     {
-        IsAvailable = true;
         _startScale = transform.localScale;
+        _startPos = transform.position;
         _collider = GetComponent<Collider>();
         GameManager.Instance.Respawn += OnRespawn;
 
@@ -38,7 +68,7 @@ public class Mineral : PunBehaviour, IPunObservable
         if (!PhotonNetwork.isMasterClient)
             return;
 
-        if (!IsAvailable)
+        if (Respawn)
         {
             transform.localScale = Vector3.Lerp(Vector3.zero, _startScale, _animCurve.Evaluate(_timer));
             
@@ -49,6 +79,21 @@ public class Mineral : PunBehaviour, IPunObservable
                 _timer = 0;
                 _spawnDuration = Random.Range(_minSpawnDuration, _maxSpawnDuration);
                 IsAvailable = true;
+                Respawn = false;
+            }
+        }
+
+        if (_retract)
+        {
+            _retractTimer += Time.deltaTime / .25f;
+            var evaluated = _retractCurve.Evaluate(_retractTimer);
+
+            transform.position = Vector3.LerpUnclamped(_retractPos, _startPos, evaluated);
+            transform.localScale = Vector3.LerpUnclamped(_retractScale, _startScale, evaluated);
+
+            if (_retractTimer >= 1)
+            {
+                _retract = false;
             }
         }
     }
@@ -56,6 +101,9 @@ public class Mineral : PunBehaviour, IPunObservable
     public void Toggle(bool toggler)
     {
         IsAvailable = false;
+
+        if (!toggler)
+            transform.localScale = Vector3.zero;
 
         //_collider.enabled = toggler;
         //_meshRenderer.enabled = toggler;
@@ -73,6 +121,15 @@ public class Mineral : PunBehaviour, IPunObservable
         Toggle(true);
     }
 
+    [PunRPC]
+    public void RPCResetDimension()
+    {
+        _retractTimer = 0;
+        _retract = true;
+        _retractPos = transform.position;
+        _retractScale = transform.localScale;
+    }
+
     void OnDestroy()
     {
         if (GameManager.Instance != null) GameManager.Instance.Respawn -= OnRespawn;
@@ -82,10 +139,14 @@ public class Mineral : PunBehaviour, IPunObservable
     {
         if (stream.isWriting)
         {
+            stream.SendNext(_isBeingGathered);
+            stream.SendNext(_retract);
             stream.SendNext(IsAvailable);
         }
         else
         {
+            _isBeingGathered = (bool) stream.ReceiveNext();
+            _retract = (bool) stream.ReceiveNext();
             IsAvailable = (bool) stream.ReceiveNext();
         }
     }

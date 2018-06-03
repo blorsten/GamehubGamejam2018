@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 
 public class GameManager : PUNSingleton<GameManager>
 {
+    private Mineral[] _minerals;
     private bool _finishedSetup;
 
     public PhotonView Owner { get; set; }
@@ -18,6 +19,7 @@ public class GameManager : PUNSingleton<GameManager>
     // Use this for initialization
     void Start()
     {
+        _minerals = FindObjectsOfType<Mineral>();
         spawnPoints = FindObjectsOfType<SpawnPoint>().Where(point => point.gameObject.activeSelf).ToArray();
 
         Owner = GetComponent<PhotonView>();
@@ -35,9 +37,16 @@ public class GameManager : PUNSingleton<GameManager>
     // Update is called once per frame
     void Update()
     {
+        if (PhotonNetwork.isMasterClient && _minerals.Count(mineral => mineral.IsAvailable) <= 2)
+        {
+            foreach (Mineral mineral in _minerals)
+            {
+                if (!mineral.IsAvailable)
+                    mineral.Respawn = true;
+            }
+        }
+
         UpdatePlayerList();
-
-
 
         if (!_finishedSetup && PhotonNetwork.inRoom && Players.Count == PhotonNetwork.room.PlayerCount)
         {
