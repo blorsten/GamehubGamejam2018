@@ -4,8 +4,11 @@ using UnityEngine;
 
 public enum PlayerMode { Normal, Spectator }
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPunObservable
 {
+    public InAudioEvent crouchSound;
+    public InAudioEvent walkSound;
+
     [SerializeField]
     private float speed;
     public float crouchSpeed = 3;
@@ -16,7 +19,10 @@ public class PlayerController : MonoBehaviour
     private float jumpForce;
     [SerializeField]
     private Transform playerModel;
+    private Vector3 headTarget;
+    public Transform collider;
     public Transform GunModel;
+    public Animator animator;
 
     public GameObject playerCam;
 
@@ -30,6 +36,10 @@ public class PlayerController : MonoBehaviour
     private float rotY = 0.0f; // rotation around the up/y axis
     private float rotX = 0.0f; // rotation around the right/x axis
     private bool _isCrouching;
+    private bool _isWalking;
+    private bool _lastIsCrouching;
+    private bool _lastIsWalking;
+    private float walkrimer;
 
     void Awake()
     {
@@ -39,6 +49,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        headTarget = HeadTrans.localPosition;
+
         if (!PhotonNetwork.connected)
             Destroy(gameObject);
 
@@ -102,23 +114,20 @@ public class PlayerController : MonoBehaviour
     {
         if (pw.isMine)
         {
-            var x = Input.GetAxis("Horizontal");
-            var y = Input.GetAxis("Vertical");
-
             if (Input.GetKey(KeyCode.LeftControl))
             {
+                headTarget = new Vector3(0, 1.75f / 2, 0);
+                collider.localScale = new Vector3(1, .5f, 1);
                 _isCrouching = true;
-                playerModel.localScale = new Vector3(1, .5f, 1);
-                playerModel.localPosition = new Vector3(0, 0, 0);
-                HeadTrans.localPosition = new Vector3(0, 1.75f / 2, 0);
             }
             else
             {
+                headTarget = new Vector3(0, 1.75f, 0);
+                collider.localScale = new Vector3(1, 1f, 1);
                 _isCrouching = false;
-                playerModel.localScale = new Vector3(1, 1, 1);
-                playerModel.localPosition = new Vector3(0, 0, 0);
-                HeadTrans.localPosition = new Vector3(0, 1.75f, 0);
             }
+
+            HeadTrans.localPosition = Vector3.Lerp(HeadTrans.localPosition, headTarget, .1f);
 
             if (onGround && Input.GetKeyDown(KeyCode.Space))
                 rb.AddForce(transform.up * jumpForce);
@@ -135,7 +144,22 @@ public class PlayerController : MonoBehaviour
             HeadTrans.rotation = localRotation;
 
             rb.MoveRotation(Quaternion.Euler(0, rotY, 0));
+
+            animator.SetBool("Walking", _isWalking);
+            animator.SetBool("Crouching", _isCrouching);
         }
+
+        if (_isWalking && walkrimer <= 0)
+        {
+            InAudio.PostEvent(gameObject, walkSound);
+            walkrimer = .9f;
+        }
+
+        if (walkrimer > 0)
+            walkrimer -= Time.deltaTime;
+
+        _lastIsCrouching = _isCrouching;
+        _lastIsWalking = _isWalking;
     }
 
     void FixedUpdate()
@@ -150,6 +174,11 @@ public class PlayerController : MonoBehaviour
 
             if (onGround && Input.GetKeyDown(KeyCode.Space))
                 rb.AddForce(transform.up * jumpForce);
+
+            if (x != 0 || y != 0)
+                _isWalking = true;
+            else
+                _isWalking = false;
 
             rb.MovePosition(transform.position + newPos * (_isCrouching ? crouchSpeed : speed) * Time.deltaTime);
         }
@@ -171,5 +200,22 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground")
             onGround = false;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(_isWalking);
+            stream.SendNext(_isCrouching);
+        }
+        else
+        {
+            _isWalking = (bool)stream.ReceiveNext();
+            _lastIsCrouching = (bool)stream.ReceiveNext();
+
+            animator.SetBool("Walking", _isWalking);
+            animator.SetBool("Crouching", _lastIsCrouching);
+        }
     }
 }

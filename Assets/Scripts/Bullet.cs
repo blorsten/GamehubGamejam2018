@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviour
 {
     public PlayerController controller;
     public PhotonView _owner;
+    public InAudioEvent shoot;
 
     public bool IsDestroyed { get; set; }
 
@@ -13,6 +14,7 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         _owner = GetComponent<PhotonView>();
+        InAudio.PostEventAtPosition(gameObject, shoot, transform.position);
     }
 
     // Update is called once per frame
@@ -36,12 +38,11 @@ public class Bullet : MonoBehaviour
             }
         }
 
-        if (other.gameObject.layer == LayerMask.GetMask("Mineral"))
+        var mineral = other.GetComponent<Mineral>();
+        if (mineral != null)
         {
             if (!IsDestroyed)
             {
-                var mineral = other.GetComponent<Mineral>();
-
                 if (mineral.IsAvailable)
                 {
                     mineral.Owner.RPC("RPCDisable", PhotonTargets.All, false);

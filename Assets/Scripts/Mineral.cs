@@ -7,6 +7,9 @@ using Random = UnityEngine.Random;
 public class Mineral : PunBehaviour, IPunObservable
 {
     public bool _isBeingGathered;
+    public InAudioEvent suck;
+    public InAudioEvent breaksound;
+    private float timer;
 
     private float _retractTimer;
     public bool _retract;
@@ -42,7 +45,7 @@ public class Mineral : PunBehaviour, IPunObservable
     {
         get
         {
-            return _respawn; 
+            return _respawn;
         }
         set
         {
@@ -66,15 +69,24 @@ public class Mineral : PunBehaviour, IPunObservable
 
     void Update()
     {
+        if (_isBeingGathered && timer <= 0)
+        {
+            InAudio.PostEvent(gameObject, suck);
+            timer = .47f;
+        }
+
+        if (timer > 0)
+            timer -= Time.deltaTime;
+
         if (!PhotonNetwork.isMasterClient)
             return;
 
         if (Respawn)
         {
             transform.localScale = Vector3.Lerp(Vector3.zero, _startScale, _animCurve.Evaluate(_timer));
-            
+
             _timer += Time.deltaTime / _spawnDuration;
-            
+
             if (_timer >= 1)
             {
                 _timer = 0;
@@ -114,6 +126,7 @@ public class Mineral : PunBehaviour, IPunObservable
     [PunRPC]
     public void RPCDisable(bool toggler)
     {
+        InAudio.PostEvent(gameObject, breaksound);
         Toggle(toggler);
     }
 
@@ -146,9 +159,9 @@ public class Mineral : PunBehaviour, IPunObservable
         }
         else
         {
-            _isBeingGathered = (bool) stream.ReceiveNext();
-            _retract = (bool) stream.ReceiveNext();
-            IsAvailable = (bool) stream.ReceiveNext();
+            _isBeingGathered = (bool)stream.ReceiveNext();
+            _retract = (bool)stream.ReceiveNext();
+            IsAvailable = (bool)stream.ReceiveNext();
         }
     }
 }
