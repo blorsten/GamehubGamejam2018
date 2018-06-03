@@ -64,7 +64,6 @@ public class Gun : PunBehaviour, IPunObservable
                     _targetRaycasts,
                     100, LayerMask.GetMask("Mineral"));
 
-                Debug.Log(hits);
                 if (hits == 1)
                 {
                     var raycastHit = _targetRaycasts[0];
