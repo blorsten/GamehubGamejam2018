@@ -56,7 +56,7 @@ public class PUNManager : PUNSingleton<PUNManager>
             bool start;
             if (PhotonNetwork.room.TryGetRoomProperty<bool>("START", out start) && start)
             {
-                PhotonNetwork.LoadLevel("Map1");
+                PhotonNetwork.LoadLevel("Map2");
             }
 
             if (PhotonNetwork.room.PlayerCount == PhotonNetwork.room.MaxPlayers)

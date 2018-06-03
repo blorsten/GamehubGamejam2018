@@ -62,8 +62,9 @@ public class Gun : PunBehaviour, IPunObservable
                     _owner.HeadTrans.transform.position,
                     _owner.HeadTrans.forward,
                     _targetRaycasts,
-                    _reloadDistance, LayerMask.GetMask("Mineral"));
+                    100, LayerMask.GetMask("Mineral"));
 
+                Debug.Log(hits);
                 if (hits == 1)
                 {
                     var raycastHit = _targetRaycasts[0];

@@ -36,7 +36,7 @@ public class Bullet : MonoBehaviour
             }
         }
 
-        if (other.CompareTag("Mineral"))
+        if (other.gameObject.layer == LayerMask.GetMask("Mineral"))
         {
             if (!IsDestroyed)
             {

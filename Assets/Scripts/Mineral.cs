@@ -3,6 +3,7 @@ using UnityEngine;
 using Photon;
 using Random = UnityEngine.Random;
 
+[SelectionBase]
 public class Mineral : PunBehaviour, IPunObservable
 {
     public bool _isBeingGathered;
