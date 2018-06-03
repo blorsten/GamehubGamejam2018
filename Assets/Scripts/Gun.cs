@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Gun : PunBehaviour, IPunObservable
 {
-    private bool _isOutOfAmmo;
+    public bool IsOutOfAmmo;
     private float _gatheringTimer;
 
     private RaycastHit[] _targetRaycasts = new RaycastHit[1];
@@ -25,7 +25,7 @@ public class Gun : PunBehaviour, IPunObservable
 
     private void OnRespawn()
     {
-        _isOutOfAmmo = false;
+        IsOutOfAmmo = false;
     }
 
     void Update()
@@ -43,18 +43,18 @@ public class Gun : PunBehaviour, IPunObservable
             return;
 
         //Shoot
-        if (_owner.playerMode == PlayerMode.Normal && Input.GetMouseButtonDown(0) && !_isOutOfAmmo)
+        if (_owner.playerMode == PlayerMode.Normal && Input.GetMouseButtonDown(0) && !IsOutOfAmmo)
         {
             var HeadTrans = _owner.HeadTrans;
             var go = PhotonNetwork.Instantiate("Bullet", HeadTrans.position + HeadTrans.forward, Quaternion.identity, 0);
             go.GetComponent<Rigidbody>().AddForce(HeadTrans.forward * _shootForce);
             go.GetComponent<Bullet>().controller = _owner;
 
-            _isOutOfAmmo = true;
+            IsOutOfAmmo = true;
         }
 
         //Reload
-        if (Input.GetMouseButtonDown(1) && _isOutOfAmmo)
+        if (Input.GetMouseButtonDown(1) && IsOutOfAmmo)
         {
             if (!_targetMineral)
             {
@@ -113,7 +113,7 @@ public class Gun : PunBehaviour, IPunObservable
         if (success)
             _targetMineral.Owner.RPC("RPCDisable", PhotonTargets.All, false);
 
-        _isOutOfAmmo = !success;
+        IsOutOfAmmo = !success;
         _targetMineral = null;
         _gatheringTimer = 0;
         _targetRayCastPoint = Vector3.zero;
