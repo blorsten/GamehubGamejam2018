@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour, IPunObservable
     private float jumpForce;
     [SerializeField]
     private Transform playerModel;
+    private Vector3 headTarget;
     public Transform collider;
     public Transform GunModel;
     public Animator animator;
@@ -42,6 +43,8 @@ public class PlayerController : MonoBehaviour, IPunObservable
 
     private void Start()
     {
+        headTarget = HeadTrans.localPosition;
+
         if (!PhotonNetwork.connected)
             Destroy(gameObject);
 
@@ -107,16 +110,18 @@ public class PlayerController : MonoBehaviour, IPunObservable
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
-                HeadTrans.localPosition = new Vector3(0, 1.75f / 2, 0);
+                headTarget = new Vector3(0, 1.75f / 2, 0);
                 collider.localScale = new Vector3(1, .5f, 1);
                 _isCrouching = true;
             }
             else
             {
-                HeadTrans.localPosition = new Vector3(0, 1.75f, 0);
+                headTarget = new Vector3(0, 1.75f, 0);
                 collider.localScale = new Vector3(1, 1f, 1);
                 _isCrouching = false;
             }
+
+            HeadTrans.localPosition = Vector3.Lerp(HeadTrans.localPosition, headTarget, .1f);
 
             if (onGround && Input.GetKeyDown(KeyCode.Space))
                 rb.AddForce(transform.up * jumpForce);
@@ -133,6 +138,9 @@ public class PlayerController : MonoBehaviour, IPunObservable
             HeadTrans.rotation = localRotation;
 
             rb.MoveRotation(Quaternion.Euler(0, rotY, 0));
+
+            animator.SetBool("Walking", _isWalking);
+            animator.SetBool("Crouching", _isCrouching);
         }
     }
 
