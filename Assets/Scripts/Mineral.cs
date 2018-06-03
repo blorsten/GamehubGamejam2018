@@ -98,11 +98,12 @@ public class Mineral : PunBehaviour, IPunObservable
 
         if (_retract)
         {
-            _retractTimer += Time.deltaTime / .25f;
             var evaluated = _retractCurve.Evaluate(_retractTimer);
 
             transform.position = Vector3.LerpUnclamped(_retractPos, _startPos, evaluated);
             transform.localScale = Vector3.LerpUnclamped(_retractScale, _startScale, evaluated);
+            
+            _retractTimer += Time.deltaTime / .25f;
 
             if (_retractTimer >= 1)
             {
@@ -128,6 +129,7 @@ public class Mineral : PunBehaviour, IPunObservable
     {
         InAudio.PostEvent(gameObject, breaksound);
         Toggle(toggler);
+        transform.localScale = Vector3.zero;
     }
 
     private void OnRespawn()
