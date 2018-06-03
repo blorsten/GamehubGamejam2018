@@ -74,10 +74,12 @@ public class Gun : PunBehaviour, IPunObservable
                     {
                         Mineral targetMineral = raycastHit.transform.GetComponent<Mineral>();
 
-                        if (targetMineral.IsAvailable)
+                        if (targetMineral.IsAvailable && !targetMineral._isBeingGathered)
                         {
                             _targetRayCastPoint = raycastHit.point;
                             _targetMineral = targetMineral;
+                            _targetMineral._retract = false;
+                            _targetMineral._isBeingGathered = true;
                         }
                     }
                 }
@@ -88,6 +90,9 @@ public class Gun : PunBehaviour, IPunObservable
         {
             //We're gathering!
             _gatheringTimer += Time.deltaTime / _reloadDuration;
+
+            _targetMineral.transform.localScale = Vector3.Lerp(_targetMineral._startScale, Vector3.zero, _gatheringTimer);
+            _targetMineral.transform.position = Vector3.Lerp(_targetMineral._startPos, _targetRayCastPoint, _gatheringTimer);
 
             //Did we finish gathering?
             if (_gatheringTimer >= 1)
@@ -112,7 +117,10 @@ public class Gun : PunBehaviour, IPunObservable
     {
         if (success)
             _targetMineral.Owner.RPC("RPCDisable", PhotonTargets.All, false);
+        else
+            _targetMineral.Owner.RPC("RPCResetDimension", PhotonTargets.All);
 
+        _targetMineral._isBeingGathered = false;
         IsOutOfAmmo = !success;
         _targetMineral = null;
         _gatheringTimer = 0;

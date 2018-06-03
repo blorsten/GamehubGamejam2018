@@ -41,4 +41,5 @@ MonoBehaviour:
   - RPCKillPlayer
   - RPCKill
   - RPCRespawn
+  - RPCResetDimension
   DisableAutoOpenWizard: 1
