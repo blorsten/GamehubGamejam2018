@@ -145,6 +145,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1426533499764540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4017290348884276}
+  - component: {fileID: 136887721271103598}
+  m_Layer: 9
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1450456159682794
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,8 +291,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4622042639648814}
-  - component: {fileID: 95681974697473016}
-  - component: {fileID: 136041763923080374}
+  - component: {fileID: 95626853643007498}
   m_Layer: 9
   m_Name: slime (3)
   m_TagString: Player
@@ -284,6 +299,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4017290348884276
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1426533499764540}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4255973513981286}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4021080993382828
 Transform:
   m_ObjectHideFlags: 1
@@ -323,6 +351,7 @@ Transform:
   - {fileID: 4556623227027546}
   - {fileID: 224655193523120144}
   - {fileID: 4622042639648814}
+  - {fileID: 4017290348884276}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -828,7 +857,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!95 &95681974697473016
+--- !u!95 &95626853643007498
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
@@ -836,8 +865,8 @@ Animator:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1983361652348826}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: e849aaaacff3b9f48a9f7632a557e516, type: 3}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2c071ed52a51e8949b9e16d760417ec3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -869,6 +898,7 @@ MonoBehaviour:
   - {fileID: 114324485704886700}
   - {fileID: 4556623227027546}
   - {fileID: 4622042639648814}
+  - {fileID: 114924210035421300}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -893,7 +923,6 @@ MonoBehaviour:
   _shootForce: 1000
   _reloadDistance: 3
   _reloadDuration: 1.5
-  _reloadDistanceUntilBreak: 1.5
 --- !u!114 &114390446917169956
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1145,7 +1174,7 @@ MonoBehaviour:
     InterpolateRotateTowardsSpeed: 180
     InterpolateLerpSpeed: 5
   m_ScaleModel:
-    SynchronizeEnabled: 0
+    SynchronizeEnabled: 1
     InterpolateOption: 2
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 1
@@ -1167,7 +1196,9 @@ MonoBehaviour:
   gun: {fileID: 114324485704886700}
   jumpForce: 400
   playerModel: {fileID: 4622042639648814}
+  collider: {fileID: 4017290348884276}
   GunModel: {fileID: 4025300020932794}
+  animator: {fileID: 95626853643007498}
   playerCam: {fileID: 1180728098734642, guid: 93381bcc2e131b84fac4e56146748dc6, type: 2}
   pw: {fileID: 114213612866042584}
   playerMode: 0
@@ -1259,12 +1290,12 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!136 &136041763923080374
+--- !u!136 &136887721271103598
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1983361652348826}
+  m_GameObject: {fileID: 1426533499764540}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
