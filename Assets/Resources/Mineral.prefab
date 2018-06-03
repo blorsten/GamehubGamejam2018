@@ -32,7 +32,7 @@ GameObject:
   m_TagString: Mineral
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 127
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4189549681437646
 Transform:
@@ -41,7 +41,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1330424756249820}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15540555, y: 0, z: -26.649065}
+  m_LocalPosition: {x: -8.945007, y: -0.45150208, z: -23.40347}
   m_LocalScale: {x: 0.5737133, y: 0.57371414, z: 0.57371414}
   m_Children: []
   m_Father: {fileID: 0}
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 16342205, guid: 0472bdc8d6d15384d98f22ee34302f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _entityType: 0
+  _entityType: 4
 --- !u!114 &114301583275538754
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,6 +125,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 23247375894003570}
   _owner: {fileID: 114478359992149762}
+  _minSpawnDuration: 5
+  _maxSpawnDuration: 10
+  _animCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 3.175523
+      outSlope: 3.175523
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114478359992149762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -146,6 +166,7 @@ MonoBehaviour:
   ownershipTransfer: 0
   ObservedComponents:
   - {fileID: 114479246208173730}
+  - {fileID: 114301583275538754}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1

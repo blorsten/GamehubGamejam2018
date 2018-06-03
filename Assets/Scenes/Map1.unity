@@ -118,7 +118,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-9593342
+  m_Name: pb_Mesh-1421508
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -619,7 +619,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-9593378
+  m_Name: pb_Mesh-1421544
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -749,7 +749,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-9593360
+  m_Name: pb_Mesh-1421526
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -1497,7 +1497,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-9593306
+  m_Name: pb_Mesh-1421472
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -2273,7 +2273,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-9593324
+  m_Name: pb_Mesh-1421490
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -2890,7 +2890,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-9593252
+  m_Name: pb_Mesh-1421418
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -3875,7 +3875,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-9593270
+  m_Name: pb_Mesh-1421436
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -10880,6 +10880,11 @@ Prefab:
         type: 2}
       propertyPath: m_Center.z
       value: -0.39844897
+      objectReference: {fileID: 0}
+    - target: {fileID: 114479246208173730, guid: 3eff1caab7f371747a31cf327661ddb2,
+        type: 2}
+      propertyPath: m_ScaleModel.InterpolateOption
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3eff1caab7f371747a31cf327661ddb2, type: 2}

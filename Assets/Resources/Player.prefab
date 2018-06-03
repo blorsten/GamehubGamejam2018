@@ -436,7 +436,7 @@ MonoBehaviour:
   _shootForce: 1000
   _reloadDistance: 3
   _reloadDuration: 1.5
-  _reloadDistanceUntilBreak: 0.7
+  _reloadDistanceUntilBreak: 1.5
 --- !u!114 &114390446917169956
 MonoBehaviour:
   m_ObjectHideFlags: 1

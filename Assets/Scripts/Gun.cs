@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Gun : PunBehaviour, IPunObservable
 {
-    private Vector3? _gatherPosition;
     private bool _isOutOfAmmo;
     private float _gatheringTimer;
 
@@ -18,7 +17,6 @@ public class Gun : PunBehaviour, IPunObservable
     [SerializeField] private float _shootForce;
     [SerializeField] private float _reloadDistance;
     [SerializeField] private float _reloadDuration;
-    [SerializeField] private float _reloadDistanceUntilBreak;
 
     void Start()
     {
@@ -69,9 +67,19 @@ public class Gun : PunBehaviour, IPunObservable
                 if (hits == 1)
                 {
                     var raycastHit = _targetRaycasts[0];
-                    _targetRayCastPoint = raycastHit.point;
-                    _targetMineral = raycastHit.transform.GetComponent<Mineral>();
-                    _gatherPosition = _owner.transform.position;
+                    
+                    float dist = Vector3.Distance(raycastHit.transform.position, _owner.transform.position);
+
+                    if (dist < _reloadDistance)
+                    {
+                        Mineral targetMineral = raycastHit.transform.GetComponent<Mineral>();
+
+                        if (targetMineral.IsAvailable)
+                        {
+                            _targetRayCastPoint = raycastHit.point;
+                            _targetMineral = targetMineral;
+                        }
+                    }
                 }
             }
         }
@@ -84,13 +92,12 @@ public class Gun : PunBehaviour, IPunObservable
             //Did we finish gathering?
             if (_gatheringTimer >= 1)
                 FinishGathering(true);
-
-            //Did we break by moving?
-            if (_gatherPosition.HasValue)
+            else
             {
-                float dist = Vector3.Distance(_gatherPosition.Value, _owner.transform.position);
+                //Did we break by moving?
+                float dist = Vector3.Distance(_targetMineral.transform.position, _owner.transform.position);
 
-                if (dist > _reloadDistanceUntilBreak)
+                if (dist > _reloadDistance)
                     FinishGathering(false);
             }
         }
@@ -104,12 +111,11 @@ public class Gun : PunBehaviour, IPunObservable
     private void FinishGathering(bool success)
     {
         if (success)
-            _targetMineral.Owner.RPC("RPCDisable", PhotonTargets.All);
+            _targetMineral.Owner.RPC("RPCDisable", PhotonTargets.All, false);
 
         _isOutOfAmmo = !success;
         _targetMineral = null;
         _gatheringTimer = 0;
-        _gatherPosition = null;
         _targetRayCastPoint = Vector3.zero;
         _lineRenderer.positionCount = 0;
     }

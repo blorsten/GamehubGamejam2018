@@ -41,8 +41,12 @@ public class Bullet : MonoBehaviour
             if (!IsDestroyed)
             {
                 var mineral = other.GetComponent<Mineral>();
-                mineral.Owner.RPC("RPCDisable", PhotonTargets.All);
-                IsDestroyed = true;
+
+                if (mineral.IsAvailable)
+                {
+                    mineral.Owner.RPC("RPCDisable", PhotonTargets.All, false);
+                    IsDestroyed = true;
+                }
             }
         }
 

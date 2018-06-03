@@ -23,7 +23,7 @@ public class PUNManager : PUNSingleton<PUNManager>
     {
         if (name == "")
             name = DateTime.Now.Millisecond.ToString();
-        PhotonNetwork.player.NickName = name;
+        PhotonNetwork.player.NickName = name.Substring(0, Math.Min(name.Length, 15));
         PhotonNetwork.ConnectUsingSettings(Version);
         SearchingForMatch = true;
     }
