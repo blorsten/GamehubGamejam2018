@@ -1189,6 +1189,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a148056e525c0488afaca499e19ad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  crouchSound:
+    Events:
+    - Event: {fileID: 114315894525905872, guid: 126e8309a2604f643a737537c5853188,
+        type: 2}
+      PostAt: 0
+  walkSound:
+    Events:
+    - Event: {fileID: 114973056125570768, guid: 126e8309a2604f643a737537c5853188,
+        type: 2}
+      PostAt: 0
   speed: 6
   crouchSpeed: 3
   HeadTrans: {fileID: 4556623227027546}

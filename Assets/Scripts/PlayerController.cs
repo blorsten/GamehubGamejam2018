@@ -6,6 +6,9 @@ public enum PlayerMode { Normal, Spectator }
 
 public class PlayerController : MonoBehaviour, IPunObservable
 {
+    public InAudioEvent crouchSound;
+    public InAudioEvent walkSound;
+
     [SerializeField]
     private float speed;
     public float crouchSpeed = 3;
@@ -34,6 +37,9 @@ public class PlayerController : MonoBehaviour, IPunObservable
     private float rotX = 0.0f; // rotation around the right/x axis
     private bool _isCrouching;
     private bool _isWalking;
+    private bool _lastIsCrouching;
+    private bool _lastIsWalking;
+    private float walkrimer;
 
     void Awake()
     {
@@ -142,6 +148,18 @@ public class PlayerController : MonoBehaviour, IPunObservable
             animator.SetBool("Walking", _isWalking);
             animator.SetBool("Crouching", _isCrouching);
         }
+
+        if (_isWalking && walkrimer <= 0)
+        {
+            InAudio.PostEvent(gameObject, walkSound);
+            walkrimer = .9f;
+        }
+
+        if (walkrimer > 0)
+            walkrimer -= Time.deltaTime;
+
+        _lastIsCrouching = _isCrouching;
+        _lastIsWalking = _isWalking;
     }
 
     void FixedUpdate()
@@ -193,8 +211,11 @@ public class PlayerController : MonoBehaviour, IPunObservable
         }
         else
         {
-            animator.SetBool("Walking", (bool)stream.ReceiveNext());
-            animator.SetBool("Crouching", (bool)stream.ReceiveNext());
+            _isWalking = (bool)stream.ReceiveNext();
+            _lastIsCrouching = (bool)stream.ReceiveNext();
+
+            animator.SetBool("Walking", _isWalking);
+            animator.SetBool("Crouching", _lastIsCrouching);
         }
     }
 }

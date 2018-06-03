@@ -115,6 +115,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
   _owner: {fileID: 0}
+  shoot:
+    Events:
+    - Event: {fileID: 114205462054063776, guid: 126e8309a2604f643a737537c5853188,
+        type: 2}
+      PostAt: 0
 --- !u!114 &114604339231205854
 MonoBehaviour:
   m_ObjectHideFlags: 1

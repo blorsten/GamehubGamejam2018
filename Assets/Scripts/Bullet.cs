@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviour
 {
     public PlayerController controller;
     public PhotonView _owner;
+    public InAudioEvent shoot;
 
     public bool IsDestroyed { get; set; }
 
@@ -13,6 +14,7 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         _owner = GetComponent<PhotonView>();
+        InAudio.PostEventAtPosition(gameObject, shoot, transform.position);
     }
 
     // Update is called once per frame
