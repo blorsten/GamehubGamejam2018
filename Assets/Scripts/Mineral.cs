@@ -132,7 +132,9 @@ public class Mineral : PunBehaviour, IPunObservable
 
     private void OnRespawn()
     {
-        Toggle(true);
+        transform.position = _startPos;
+        transform.localScale = _startScale;
+        IsAvailable = true;
     }
 
     [PunRPC]
