@@ -90,6 +90,8 @@ public class GameManager : PUNSingleton<GameManager>
         {
             if (count <= 1)
             {
+                var lastPlayer = Players.FirstOrDefault(x => x.playerMode == PlayerMode.Normal);
+                ScoreBoard.Instance.AddScore(lastPlayer.pw.owner);
                 Respawn.Invoke();
                 if (spawnPoints.Length >= Players.Count)
                     RespawnPlayers();
