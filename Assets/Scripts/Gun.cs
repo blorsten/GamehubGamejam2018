@@ -54,7 +54,7 @@ public class Gun : PunBehaviour, IPunObservable
         }
 
         //Reload
-        if (Input.GetMouseButtonDown(0) && IsOutOfAmmo)
+        if (Input.GetMouseButtonDown(1) && IsOutOfAmmo)
         {
             if (!_targetMineral)
             {
@@ -86,13 +86,13 @@ public class Gun : PunBehaviour, IPunObservable
             }
         }
 
-        if (Input.GetMouseButton(0) && _targetMineral)
+        if (Input.GetMouseButton(1) && _targetMineral)
         {
             //We're gathering!
-            _gatheringTimer += Time.deltaTime / _reloadDuration;
-
             _targetMineral.transform.localScale = Vector3.Lerp(_targetMineral._startScale, Vector3.zero, _gatheringTimer);
             _targetMineral.transform.position = Vector3.Lerp(_targetMineral._startPos, _targetRayCastPoint, _gatheringTimer);
+            
+            _gatheringTimer += Time.deltaTime / _reloadDuration;
 
             //Did we finish gathering?
             if (_gatheringTimer >= 1)

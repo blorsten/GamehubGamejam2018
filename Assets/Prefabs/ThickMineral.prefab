@@ -281,12 +281,13 @@ MonoBehaviour:
   OwnerShipWasTransfered: 0
   prefixBackup: -1
   synchronization: 3
-  onSerializeTransformOption: 3
+  onSerializeTransformOption: 4
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
   - {fileID: 114373075675137624}
   - {fileID: 114689818490555640}
+  - {fileID: 4583107344819208}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1

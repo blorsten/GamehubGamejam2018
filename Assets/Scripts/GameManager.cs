@@ -16,6 +16,22 @@ public class GameManager : PUNSingleton<GameManager>
 
     public Action Respawn;
 
+    private void OnLevelWasLoaded(int level)
+    {
+        if (level == 1)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
+        spawnPoints = FindObjectsOfType<SpawnPoint>().Where(point => point.gameObject.activeSelf).ToArray();
+    }
+
     // Use this for initialization
     void Start()
     {
